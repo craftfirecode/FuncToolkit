@@ -12,29 +12,38 @@ export interface Item {
   const lastUpdatedKey = "lastUpdated";
   
   export const initializeDatabase = (): Promise<IDBDatabase> => {
+    const dbVersion = 1;
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open(dbName, 1);
-  
-      request.onupgradeneeded = (event) => {
-        const db = (event.target as IDBOpenDBRequest).result;
-        if (!db.objectStoreNames.contains(storeName)) {
-          db.createObjectStore(storeName, { keyPath: "id" });
-        }
-        if (!db.objectStoreNames.contains(metaStoreName)) {
-          db.createObjectStore(metaStoreName);
-        }
-      };
-  
-      request.onsuccess = async (event) => {
-        const db = (event.target as IDBOpenDBRequest).result;
-        resolve(db);
-      };
-  
-      request.onerror = (event) => {
-        reject((event.target as IDBOpenDBRequest).error);
-      };
+        const request = indexedDB.open(dbName, dbVersion);
+
+        request.onupgradeneeded = (event) => {
+            const db = (event.target as IDBOpenDBRequest).result;
+            // Erstellen der notwendigen Objektspeicher, wenn sie nicht existieren
+            if (!db.objectStoreNames.contains(storeName)) {
+                db.createObjectStore(storeName, { keyPath: "id" });
+            }
+            if (!db.objectStoreNames.contains(metaStoreName)) {
+                db.createObjectStore(metaStoreName);
+            }
+        };
+
+        request.onsuccess = (event) => {
+            const db = (event.target as IDBOpenDBRequest).result;
+            // Überprüfung, ob alle Objektspeicher existieren, nachdem das Upgrade abgeschlossen ist
+            if (db.objectStoreNames.contains(storeName) && db.objectStoreNames.contains(metaStoreName)) {
+                resolve(db);
+            } else {
+                reject(new Error("Datenbank-Initialisierung fehlgeschlagen: Nicht alle Objektspeicher wurden korrekt erstellt."));
+            }
+        };
+
+        request.onerror = (event) => {
+            reject(new Error("Datenbank-Initialisierung fehlgeschlagen: " + (event.target as IDBOpenDBRequest).error?.toString()));
+        };
     });
-  };
+};
+
+
   
   export const getLastUpdated = (db: IDBDatabase): Promise<number | null> => {
     return new Promise((resolve, reject) => {
@@ -54,21 +63,26 @@ export interface Item {
   
   export const updateDatabase = (db: IDBDatabase, data: Item[]): Promise<void> => {
     return new Promise((resolve, reject) => {
-      const transaction = db.transaction([storeName, metaStoreName], "readwrite");
-      const itemStore = transaction.objectStore(storeName);
-      const metaStore = transaction.objectStore(metaStoreName);
-  
-      const clearRequest = itemStore.clear();
-  
-      clearRequest.onsuccess = () => {
-        data.forEach(item => itemStore.put(item));
-        metaStore.put(Date.now(), lastUpdatedKey);
-        resolve();
-      };
-  
-      clearRequest.onerror = () => reject(clearRequest.error);
+        const transaction = db.transaction([storeName, metaStoreName], "readwrite");
+        transaction.oncomplete = () => resolve();
+        transaction.onerror = () => reject(transaction.error);
+
+        const itemStore = transaction.objectStore(storeName);
+        const metaStore = transaction.objectStore(metaStoreName);
+
+        const clearRequest = itemStore.clear();
+        clearRequest.onsuccess = () => {
+            data.forEach(item => {
+                const putRequest = itemStore.put(item);
+                putRequest.onerror = () => reject(putRequest.error);
+            });
+            metaStore.put(Date.now(), lastUpdatedKey);
+        };
+
+        clearRequest.onerror = () => reject(clearRequest.error);
     });
-  };
+};
+
   
   export const fetchDataAndUpdateDB = async (db: IDBDatabase): Promise<void> => {
     const response = await fetch('https://jsonplaceholder.typicode.com/todos');
