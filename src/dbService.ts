@@ -13,34 +13,40 @@ const lastUpdatedKey = "lastUpdated";
 const REFRESH_INTERVAL_MINUTES = 15;
 
 export const initializeDatabase = (): Promise<IDBDatabase> => {
-  const dbVersion = 1;
-  return new Promise((resolve, reject) => {
-      const request = indexedDB.open(dbName, dbVersion);
+    let dbVersion = 1; // Set the initial database version
+    // Increment dbVersion based on your versioning requirement
+  
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(dbName, dbVersion);
+  
+        request.onupgradeneeded = (event) => {
+            const db = (event.target as IDBOpenDBRequest).result;
+  
+            // Check for existing object stores and delete them before creating new ones
+            if (db.objectStoreNames.contains(storeName)) {
+                db.deleteObjectStore(storeName);
+            }
+            if (db.objectStoreNames.contains(metaStoreName)) {
+                db.deleteObjectStore(metaStoreName);
+            }
+  
+            // Create new object stores
+            db.createObjectStore(storeName, { keyPath: "id" });
+            db.createObjectStore(metaStoreName);
+        };
+  
+        request.onsuccess = (event) => {
+            const db = (event.target as IDBOpenDBRequest).result;
+            resolve(db);
+        };
+  
+        request.onerror = (event) => {
+            reject(new Error("Datenbank-Initialisierung fehlgeschlagen: " + (event.target as IDBOpenDBRequest).error?.toString()));
+        };
+    });
+  };
+  
 
-      request.onupgradeneeded = (event) => {
-          const db = (event.target as IDBOpenDBRequest).result;
-          if (!db.objectStoreNames.contains(storeName)) {
-              db.createObjectStore(storeName, { keyPath: "id" });
-          }
-          if (!db.objectStoreNames.contains(metaStoreName)) {
-              db.createObjectStore(metaStoreName);
-          }
-      };
-
-      request.onsuccess = (event) => {
-          const db = (event.target as IDBOpenDBRequest).result;
-          if (db.objectStoreNames.contains(storeName) && db.objectStoreNames.contains(metaStoreName)) {
-              resolve(db);
-          } else {
-              reject(new Error("Datenbank-Initialisierung fehlgeschlagen: Nicht alle Objektspeicher wurden korrekt erstellt."));
-          }
-      };
-
-      request.onerror = (event) => {
-          reject(new Error("Datenbank-Initialisierung fehlgeschlagen: " + (event.target as IDBOpenDBRequest).error?.toString()));
-      };
-  });
-};
 
 export const getLastUpdated = (db: IDBDatabase): Promise<number | null> => {
   return new Promise((resolve, reject) => {
