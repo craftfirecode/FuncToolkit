@@ -1,17 +1,17 @@
 // App.tsx
 import React, { useEffect, useState } from "react";
-import { Item, initializeAndFilterData } from "./dbService";
+import { Item, initializeAndRetrieveData } from "./dbService";  // Änderung: Importiere die neue Funktion
 
 const App: React.FC = () => {
-  const [filteredData, setFilteredData] = useState<Item[]>([]);
+  const [allData, setAllData] = useState<Item[]>([]);  // Änderung: Umbenennen der State-Variable
 
   useEffect(() => {
-    initializeAndFilterData(setFilteredData);
+    initializeAndRetrieveData(setAllData);  // Änderung: Verwende die neue Funktion
   }, []);
 
   return (
     <div>
-      <h1>Filtered Data</h1>
+      <h1>All Data</h1>  // Änderung: Anpassen des Titels
       <table>
         <thead>
           <tr>
@@ -22,7 +22,7 @@ const App: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredData.map(item => (
+          {allData.map(item => (  // Änderung: Beziehe dich auf die neue Variable
             <tr key={item.id}>
               <td>{item.id}</td>
               <td>{item.userId}</td>
