@@ -55,12 +55,14 @@ const App: React.FC = () => {
 
   const criteria = [
     {
-      type: ["vegetable", "fruit"],
-      color: ["red", "yellow", "green"],
+      name: ["banana"],
+      color: ["yellow"]
+    },
+    {
+      color: ["red"],
     },
     {
       type: "vegetable",
-      color: ["orange", "red"],
     },
   ];
 
