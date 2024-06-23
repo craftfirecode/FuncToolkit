@@ -79,7 +79,7 @@ const App: React.FC = () => {
   
   const criteriaAs = [
     { type: ['A', 'B'], color: 'red' },
-    { size: 'medium' }
+    { size: 'small' }
   ];
   const filteredItemHidden = filterItemsHiddenList(itemsAs, criteriaAs);
   console.log("filteredItemHidden", filteredItemHidden);
