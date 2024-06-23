@@ -13,7 +13,7 @@ const lastUpdatedKey = "lastUpdated";
 const REFRESH_INTERVAL_MINUTES = 15;
 
 export const initializeDatabase = (): Promise<IDBDatabase> => {
-    let dbVersion = 1; // Set the initial database version
+    let dbVersion = 200; // Set the initial database version
     // Increment dbVersion based on your versioning requirement
   
     return new Promise((resolve, reject) => {
