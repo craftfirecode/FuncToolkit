@@ -2,6 +2,7 @@
 import React from "react";
 import {
   addUniqueObject,
+  addValueByKey,
   countBy,
   deepClone,
   everyMatch,
@@ -16,6 +17,7 @@ import {
   removeBy,
   removeDuplicates,
   removeDuplicatesInArray,
+  removeValueByKey,
   someMatch,
   sortItems,
   transformValues,
@@ -154,6 +156,19 @@ const App: React.FC = () => {
   const newItem = { name: "kirsche", type: "fruit", color: "red" }; // Name ist bereits vorhanden
   const updatedItemsObj = addUniqueObject(items, newItem, "name");
   console.log("Updated items:", updatedItemsObj);
+
+  const itemsRemoveBy = [
+    { name: "apple", type: "fruit", colors: ["red", "blue", "green"] },
+    { name: "banana", type: "fruit", colors: ["yellow"] }
+  ];
+  
+  // Entfernen der Farbe "blue" aus dem Objekt mit name "apple"
+  const updatedItemsDump = removeValueByKey(itemsRemoveBy, "name", "apple", "blue", "colors");
+  console.log('removeValueByKey:', updatedItemsDump);
+
+  // Hinzufügen der Farbe "green" zu dem Objekt mit name "apple"
+  const updatedItemsAbc = addValueByKey(itemsRemoveBy, "name", "apple", "pink", "colors");
+  console.log('Updated items:', updatedItemsAbc);
 
   return (
     <div>

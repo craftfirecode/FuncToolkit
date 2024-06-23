@@ -192,11 +192,46 @@ export function removeDuplicatesInArray(arr: any[]) {
   return [...new Set(arr)];
 }
 
-
 export function addUniqueObject(items: any[], newItem: any, key: string | number) {
   const exists = items.some(item => item[key] === newItem[key]);
   if (!exists) {
     items.push(newItem);
   }
   return items;
+}
+
+export function removeValueByKey(
+  items: { [key: string]: any }[], 
+  key: string | number, 
+  keyValue: string | number, 
+  valueToRemove: string | number, 
+  fromKeyToRemove: string | number
+): { [key: string]: any }[] {
+  return items.map(item => {
+    if (item[key] === keyValue) {
+      return {
+        ...item,
+        [fromKeyToRemove]: item[fromKeyToRemove].filter((value: string | number) => value !== valueToRemove)
+      };
+    }
+    return item;
+  });
+}
+
+export function addValueByKey(
+  items: { [key: string]: any }[], 
+  key: string | number, 
+  keyValue: string | number, 
+  valueToAdd: string | number, 
+  toKey: string | number
+): { [key: string]: any }[] {
+  return items.map(item => {
+    if (item[key] === keyValue) {
+      return {
+        ...item,
+        [toKey]: item[toKey].includes(valueToAdd) ? item[toKey] : [...item[toKey], valueToAdd]
+      };
+    }
+    return item;
+  });
 }
