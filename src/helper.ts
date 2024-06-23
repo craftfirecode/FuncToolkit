@@ -191,3 +191,12 @@ export function removeDuplicates(items: any[], key: string | number) {
 export function removeDuplicatesInArray(arr: any[]) {
   return [...new Set(arr)];
 }
+
+
+export function addUniqueObject(items: any[], newItem: any, key: string | number) {
+  const exists = items.some(item => item[key] === newItem[key]);
+  if (!exists) {
+    items.push(newItem);
+  }
+  return items;
+}

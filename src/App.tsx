@@ -1,6 +1,7 @@
 // App.tsx
 import React from "react";
 import {
+  addUniqueObject,
   countBy,
   deepClone,
   everyMatch,
@@ -147,8 +148,12 @@ const App: React.FC = () => {
   // Beispiel: Entfernen von Duplikaten aus einem Array von Strings
   const fruits = ["apple", "apple", "banana", "cucumber", "grape", "carrot"];
   const uniqueFruits = removeDuplicatesInArray(fruits);
-
   console.log("Unique fruits:", uniqueFruits);
+
+  // Beispiel: Hinzufügen eines Objekts zu einem Array von Objekten
+  const newItem = { name: "kirsche", type: "fruit", color: "red" }; // Name ist bereits vorhanden
+  const updatedItemsObj = addUniqueObject(items, newItem, "name");
+  console.log("Updated items:", updatedItemsObj);
 
   return (
     <div>
