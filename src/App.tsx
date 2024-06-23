@@ -1,6 +1,6 @@
 // App.tsx
 import React from "react";
-import { filterItems } from "./helper";
+import { filterItems, filterItemsHiddenList } from "./helper";
 
 const App: React.FC = () => {
 
@@ -23,8 +23,13 @@ const App: React.FC = () => {
    }
   ];
 
-  const abc = filterItems(items, criteria);  // Änderung: Verwende die neue Funktion
-  console.log(abc);
+  const filterItemsFind = filterItems(items, criteria);
+  console.log('filterItemsFind', filterItemsFind);
+
+  const filteredItemHidden = filterItemsHiddenList(items, criteria);
+  console.log('filteredItemHidden', filteredItemHidden);
+
+
   return (
     <div>
       <h1>All Data</h1>  // Änderung: Anpassen des Titels

@@ -12,3 +12,27 @@ export function filterItems(items: any[], criteriaArray: any[]) {
     )
   );
 }
+
+
+export function filterItemsHiddenList(items: any[], criteria: any[]) {
+  return items.filter(item => {
+    return !criteria.some(criterion => {
+      let typeMatch = false;
+      let colorMatch = false;
+
+      if (Array.isArray(criterion.type)) {
+        typeMatch = criterion.type.includes(item.type);
+      } else {
+        typeMatch = item.type === criterion.type;
+      }
+
+      if (Array.isArray(criterion.color)) {
+        colorMatch = criterion.color.includes(item.color);
+      } else {
+        colorMatch = item.color === criterion.color;
+      }
+
+      return typeMatch && colorMatch;
+    });
+  });
+}
