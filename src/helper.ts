@@ -13,10 +13,9 @@ export function filterItems(items: any[], criteriaArray: any[]) {
   );
 }
 
-
 export function filterItemsHiddenList(items: any[], criteria: any[]) {
-  return items.filter(item => {
-    return !criteria.some(criterion => {
+  return items.filter((item) => {
+    return !criteria.some((criterion) => {
       let typeMatch = false;
       let colorMatch = false;
 
@@ -34,5 +33,17 @@ export function filterItemsHiddenList(items: any[], criteria: any[]) {
 
       return typeMatch && colorMatch;
     });
+  });
+}
+
+export function filterProperties(items: any[], propertiesToShow: any) {
+  return items.map((item: { [key: string]: any }) => {
+    let filteredItem: { [key: string]: any } = {};
+    propertiesToShow.forEach((prop: string | number) => {
+      if (item.hasOwnProperty(prop)) {
+        filteredItem[prop] = item[prop];
+      }
+    });
+    return filteredItem;
   });
 }
