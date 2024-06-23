@@ -1,6 +1,11 @@
 // App.tsx
 import React from "react";
-import { filterItems, filterItemsHiddenList, filterProperties } from "./helper";
+import {
+  filterItems,
+  filterItemsHiddenList,
+  filterProperties,
+  sortItems,
+} from "./helper";
 
 const App: React.FC = () => {
   const items = [
@@ -34,6 +39,14 @@ const App: React.FC = () => {
   const propertiesToShow = ["color", "type"];
   const filteredItems = filterProperties(items, propertiesToShow);
   console.log("filterProperties", filteredItems);
+
+  // Beispiel: Nach 'name' aufsteigend sortieren
+  const sortedItemsByNameAsc = sortItems(items, "name", "asc");
+  console.log("Sorted by name (asc):", sortedItemsByNameAsc);
+
+  // Beispiel: Nach 'type' absteigend sortieren
+  const sortedItemsByTypeDesc = sortItems(items, "type", "desc");
+  console.log("Sorted by type (desc):", sortedItemsByTypeDesc);
 
   return (
     <div>

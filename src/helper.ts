@@ -47,3 +47,15 @@ export function filterProperties(items: any[], propertiesToShow: any) {
     return filteredItem;
   });
 }
+
+export function sortItems(items: any[], key: string | number, order = 'asc') {
+  return items.slice().sort((a, b) => {
+    if (a[key] < b[key]) {
+      return order === 'asc' ? -1 : 1;
+    }
+    if (a[key] > b[key]) {
+      return order === 'asc' ? 1 : -1;
+    }
+    return 0;
+  });
+}
