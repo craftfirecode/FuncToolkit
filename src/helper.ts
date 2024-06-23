@@ -1,4 +1,4 @@
-export function filterItems(items: any[], criteriaArray: any[]) {
+export function filterByCriteria(items: any[], criteriaArray: any[]) {
   return items.filter((item) =>
     criteriaArray.some((criteria) =>
       Object.keys(criteria).every((key) => {
@@ -69,4 +69,46 @@ export function groupBy(items: any[], key: string | number) {
     result[groupKey].push(item);
     return result;
   }, {});
+}
+
+export function countBy(items: any[], key: string | number) {
+  return items.reduce((result, item) => {
+    const countKey = item[key];
+    result[countKey] = (result[countKey] || 0) + 1;
+    return result;
+  }, {});
+}
+
+export function findBy(
+  items: any[],
+  key: string | number,
+  value: string | number
+) {
+  return items.find((item) => item[key] === value);
+}
+
+export function pluck(items: any[], key: string | number) {
+  return items.map((item) => item[key]);
+}
+
+export function updateBy(
+  items: any[],
+  key: string | number,
+  value: string | number,
+  newValues: any
+) {
+  return items.map((item) => {
+    if (item[key] === value) {
+      return { ...item, ...newValues };
+    }
+    return item;
+  });
+}
+
+export function removeBy(
+  items: any[],
+  key: string | number,
+  value: string | number
+) {
+  return items.filter((item) => item[key] !== value);
 }

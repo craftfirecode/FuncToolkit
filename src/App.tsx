@@ -1,11 +1,16 @@
 // App.tsx
 import React from "react";
 import {
-  filterItems,
+  countBy,
+  filterByCriteria,
   filterItemsHiddenList,
   filterProperties,
+  findBy,
   groupBy,
+  pluck,
+  removeBy,
   sortItems,
+  updateBy,
 } from "./helper";
 
 const App: React.FC = () => {
@@ -29,8 +34,8 @@ const App: React.FC = () => {
   ];
 
   // Obj. Eigenschaften filtern
-  const filterItemsFind = filterItems(items, criteria);
-  console.log("filterItemsFind", filterItemsFind);
+  const filterByCriteriaCons = filterByCriteria(items, criteria);
+  console.log("filterByCriteria", filterByCriteriaCons);
 
   // Obj. Eigenschaften ausblenden
   const filteredItemHidden = filterItemsHiddenList(items, criteria);
@@ -52,6 +57,26 @@ const App: React.FC = () => {
   // Beispiel: Gruppieren nach 'type'
   const groupedByType = groupBy(items, "type");
   console.log("Grouped by type:", groupedByType);
+
+  // Beispiel: Zählen der Vorkommen von 'type'
+  const countByType = countBy(items, "type");
+  console.log("Count by type:", countByType);
+
+  // Beispiel: Finden eines Objekts mit 'name' gleich 'banana'
+  const foundItem = findBy(items, "name", "banana");
+  console.log("Found item:", foundItem);
+
+  // Beispiel: Extrahieren aller 'name' Werte
+  const names = pluck(items, "name");
+  console.log("Pluck Names:", names);
+
+  // Beispiel: Aktualisieren der 'color' von 'banana' zu 'green'
+  const updatedItems = updateBy(items, "name", "banana", { color: "green" });
+  console.log("Updated items:", updatedItems);
+
+  // Beispiel: Entfernen des Objekts mit 'name' gleich 'apple'
+  const itemsWithoutApple = removeBy(items, "name", "apple");
+  console.log("Items without apple:", itemsWithoutApple);
 
   return (
     <div>
