@@ -69,7 +69,17 @@ const App: React.FC = () => {
   console.log("filterByCriteria", filterByCriteriaCons);
 
   // Obj. Eigenschaften ausblenden
-  const filteredItemHidden = filterItemsHiddenList(items, criteria);
+  const itemsAs = [
+    { type: 'A', color: 'red', size: 'large' },
+    { type: 'B', color: 'blue', size: 'medium' },
+    { type: 'C', color: 'red', size: 'small' }
+  ];
+  
+  const criteriaAs = [
+    { type: ['A', 'B'], color: 'red' },
+    { size: 'medium' }
+  ];
+  const filteredItemHidden = filterItemsHiddenList(itemsAs, criteriaAs);
   console.log("filteredItemHidden", filteredItemHidden);
 
   // Obj. nur bestimmte Eigenschaften anzeigen
