@@ -163,7 +163,7 @@ const App: React.FC = () => {
   console.log("Unique fruits:", uniqueFruits);
 
   // Beispiel: Hinzufügen eines Objekts zu einem Array von Objekten
-  const newItem = { name: "kirsche", type: "fruit", color: "red" }; // Name ist bereits vorhanden
+  const newItem = { name: "kirsche", type: "fruit", color: "red" };
   const updatedItemsObj = addUniqueObject(items, newItem, "name");
   console.log("Updated items:", updatedItemsObj);
 
