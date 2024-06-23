@@ -4,6 +4,7 @@ import {
   filterItems,
   filterItemsHiddenList,
   filterProperties,
+  groupBy,
   sortItems,
 } from "./helper";
 
@@ -47,6 +48,10 @@ const App: React.FC = () => {
   // Beispiel: Nach 'type' absteigend sortieren
   const sortedItemsByTypeDesc = sortItems(items, "type", "desc");
   console.log("Sorted by type (desc):", sortedItemsByTypeDesc);
+
+  // Beispiel: Gruppieren nach 'type'
+  const groupedByType = groupBy(items, "type");
+  console.log("Grouped by type:", groupedByType);
 
   return (
     <div>

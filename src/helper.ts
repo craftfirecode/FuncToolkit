@@ -48,14 +48,25 @@ export function filterProperties(items: any[], propertiesToShow: any) {
   });
 }
 
-export function sortItems(items: any[], key: string | number, order = 'asc') {
+export function sortItems(items: any[], key: string | number, order = "asc") {
   return items.slice().sort((a, b) => {
     if (a[key] < b[key]) {
-      return order === 'asc' ? -1 : 1;
+      return order === "asc" ? -1 : 1;
     }
     if (a[key] > b[key]) {
-      return order === 'asc' ? 1 : -1;
+      return order === "asc" ? 1 : -1;
     }
     return 0;
   });
+}
+
+export function groupBy(items: any[], key: string | number) {
+  return items.reduce((result, item) => {
+    const groupKey = item[key];
+    if (!result[groupKey]) {
+      result[groupKey] = [];
+    }
+    result[groupKey].push(item);
+    return result;
+  }, {});
 }
