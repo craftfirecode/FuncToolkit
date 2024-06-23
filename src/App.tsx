@@ -2,15 +2,25 @@
 import React from "react";
 import {
   countBy,
+  deepClone,
+  everyMatch,
   filterByCriteria,
   filterItemsHiddenList,
   filterProperties,
   findBy,
+  findMax,
+  findMin,
   groupBy,
   pluck,
   removeBy,
+  removeDuplicates,
+  removeDuplicatesInArray,
+  someMatch,
   sortItems,
+  transformValues,
+  unzipObject,
   updateBy,
+  zipObject,
 } from "./helper";
 
 const App: React.FC = () => {
@@ -20,6 +30,24 @@ const App: React.FC = () => {
     { name: "cucumber", type: "vegetable", color: "green" },
     { name: "grape", type: "fruit", color: "purple" },
     { name: "carrot", type: "vegetable", color: "orange" },
+  ];
+
+  const itemsInt = [
+    { name: "apple", number: "1", color: "red" },
+    { name: "banana", number: "2", color: "yellow" },
+    { name: "cucumber", number: "3", color: "green" },
+    { name: "grape", number: "4", color: "purple" },
+    { name: "carrot", number: "5", color: "orange" },
+  ];
+
+  const itemsDoppelt = [
+    { name: "apple", type: "fruit", color: "red" },
+    { name: "banana", type: "fruit", color: "yellow" },
+    { name: "apple", type: "fruit", color: "red" },
+    { name: "cucumber", type: "vegetable", color: "green" },
+    { name: "grape", type: "fruit", color: "purple" },
+    { name: "carrot", type: "vegetable", color: "orange" },
+    { name: "banana", type: "fruit", color: "yellow" },
   ];
 
   const criteria = [
@@ -77,6 +105,50 @@ const App: React.FC = () => {
   // Beispiel: Entfernen des Objekts mit 'name' gleich 'apple'
   const itemsWithoutApple = removeBy(items, "name", "apple");
   console.log("Items without apple:", itemsWithoutApple);
+
+  // Beispiel: Überprüfen, ob mindestens ein 'fruit' im Array ist
+  const hasFruit = someMatch(items, "type", "fruit");
+  console.log("Has fruit:", hasFruit);
+
+  // Beispiel: Überprüfen, ob alle Objekte 'fruit' sind
+  const allFruits = everyMatch(items, "type", "fruit");
+  console.log("All fruits:", allFruits);
+
+  // Beispiel: Erstellen eines Objekts aus Arrays von Schlüsseln und Werten
+  const keys = ["name", "type", "color"];
+  const values = ["apple", "fruit", "red"];
+  const zippedObject = zipObject(keys, values);
+  console.log("Zipped object:", zippedObject);
+
+  // Beispiel: Konvertieren des Arrays in ein Objekt von Arrays
+  const unzippedObject = unzipObject(items);
+  console.log("Unzipped object:", unzippedObject);
+
+  // Beispiel: Transformieren der 'name' Werte in Großbuchstaben
+  const transformedItems = transformValues(items, "name", (name: any) =>
+    name.toUpperCase()
+  );
+  console.log("Transformed items:", transformedItems);
+
+  // Beispiel: Finden des Objekts mit dem maximalen und minimalen 'type' Wert
+  const maxTypeItem = findMax(itemsInt, "number");
+  const minTypeItem = findMin(itemsInt, "number");
+  console.log("Max type item:", maxTypeItem);
+  console.log("Min type item:", minTypeItem);
+
+  // Beispiel: Deep Cloning des Arrays
+  const clonedItems = deepClone(items);
+  console.log("Cloned items:", clonedItems);
+
+  // Beispiel: Entfernen von Duplikaten basierend auf dem 'name' Schlüssel
+  const uniqueItemsByName = removeDuplicates(itemsDoppelt, "name");
+  console.log("Unique items by name:", uniqueItemsByName);
+
+  // Beispiel: Entfernen von Duplikaten aus einem Array von Strings
+  const fruits = ["apple", "apple", "banana", "cucumber", "grape", "carrot"];
+  const uniqueFruits = removeDuplicatesInArray(fruits);
+
+  console.log("Unique fruits:", uniqueFruits);
 
   return (
     <div>

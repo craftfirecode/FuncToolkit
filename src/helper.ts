@@ -112,3 +112,82 @@ export function removeBy(
 ) {
   return items.filter((item) => item[key] !== value);
 }
+
+export function someMatch(
+  items: any[],
+  key: string | number,
+  value: string | number
+) {
+  return items.some((item) => item[key] === value);
+}
+
+export function everyMatch(
+  items: any[],
+  key: string | number,
+  value: string | number
+) {
+  return items.every((item) => item[key] === value);
+}
+
+export function zipObject(keys: any[], values: any[]) {
+  return keys.reduce((result, key, index) => {
+    result[key] = values[index];
+    return result;
+  }, {});
+}
+
+export function unzipObject(items: any) {
+  return items.reduce((result: any, item: any) => {
+    Object.keys(item).forEach((key) => {
+      if (!result[key]) {
+        result[key] = [];
+      }
+      result[key].push(item[key]);
+    });
+    return result;
+  }, {});
+}
+
+export function transformValues(items: any[], key: any, transformFn: any) {
+  return items.map((item) => ({
+    ...item,
+    [key]: transformFn(item[key]),
+  }));
+}
+
+export function findMax(items: any[], key: string | number) {
+  return items.reduce(
+    (maxItem, item) => (item[key] > (maxItem[key] || 0) ? item : maxItem),
+    {}
+  );
+}
+
+export function findMin(items: any[], key: string | number) {
+  return items.reduce(
+    (minItem, item) =>
+      item[key] < (minItem[key] || Infinity) ? item : minItem,
+    {}
+  );
+}
+
+export function deepClone(items: any[]) {
+  return items.map((item) => JSON.parse(JSON.stringify(item)));
+}
+
+export function removeDuplicates(items: any[], key: string | number) {
+  const uniqueItems: any[] = [];
+  const seenKeys = new Set();
+
+  items.forEach((item) => {
+    if (!seenKeys.has(item[key])) {
+      uniqueItems.push(item);
+      seenKeys.add(item[key]);
+    }
+  });
+
+  return uniqueItems;
+}
+
+export function removeDuplicatesInArray(arr: any[]) {
+  return [...new Set(arr)];
+}
