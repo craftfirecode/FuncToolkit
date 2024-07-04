@@ -25,6 +25,7 @@ import {
   updateBy,
   zipObject,
 } from "./helper";
+import { Calendar } from "./Date";
 
 const App: React.FC = () => {
   const items = [
@@ -184,6 +185,7 @@ const App: React.FC = () => {
 
   return (
     <div>
+      <Calendar />
       <h1>All Data</h1> // Änderung: Anpassen des Titels
     </div>
   );
